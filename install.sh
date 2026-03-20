@@ -51,8 +51,8 @@ link_file() {
 }
 
 install_with_apt() {
-  run_privileged apt-get update
-  run_privileged apt-get install -y tmux neovim curl xclip
+  run_privileged env DEBIAN_FRONTEND=noninteractive apt-get update
+  run_privileged env DEBIAN_FRONTEND=noninteractive apt-get install -y tmux neovim curl xclip
 }
 
 install_with_dnf() {
