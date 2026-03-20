@@ -5,6 +5,7 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 NVIM_TARGET="$HOME/.config/nvim/init.vim"
 TMUX_TARGET="$HOME/.tmux.conf"
+ALIASES_TARGET="$HOME/.machine-setup-aliases.sh"
 
 log() {
   printf '[machine-setup] %s\n' "$1"
@@ -48,6 +49,25 @@ link_file() {
   backup_existing "$target"
   ln -s "$source" "$target"
   log "Linked $target -> $source"
+}
+
+ensure_line_in_file() {
+  local file="$1"
+  local line="$2"
+
+  touch "$file"
+
+  if ! grep -Fqx "$line" "$file"; then
+    printf '\n%s\n' "$line" >> "$file"
+    log "Updated $file"
+  fi
+}
+
+install_aliases() {
+  link_file "$REPO_DIR/shell/aliases.sh" "$ALIASES_TARGET"
+
+  ensure_line_in_file "$HOME/.bashrc" '[ -f "$HOME/.machine-setup-aliases.sh" ] && . "$HOME/.machine-setup-aliases.sh"'
+  ensure_line_in_file "$HOME/.zshrc" '[ -f "$HOME/.machine-setup-aliases.sh" ] && . "$HOME/.machine-setup-aliases.sh"'
 }
 
 install_with_apt() {
@@ -94,8 +114,10 @@ main() {
 
   link_file "$REPO_DIR/nvim/init.vim" "$NVIM_TARGET"
   link_file "$REPO_DIR/tmux/tmux.conf" "$TMUX_TARGET"
+  install_aliases
 
   log "Done. Restart tmux or run: tmux source-file ~/.tmux.conf"
+  log "Open a new shell or run: . ~/.machine-setup-aliases.sh"
 }
 
 main "$@"

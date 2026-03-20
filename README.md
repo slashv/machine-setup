@@ -21,6 +21,7 @@ git clone <repo-url> ~/machine-setup && ~/machine-setup/install.sh
 - `install.sh` - package install + symlink setup
 - `tmux/tmux.conf` - tmux keybindings and pane controls
 - `nvim/init.vim` - minimal Neovim config with movement and editing basics
+- `shell/aliases.sh` - shell aliases for `t` and `v`
 
 ## Neovim keys kept
 
@@ -38,6 +39,13 @@ git clone <repo-url> ~/machine-setup && ~/machine-setup/install.sh
 - `h/j/k/l` move between panes
 - `H/J/K/L` resize panes
 - `Alt-f` toggles pane zoom
+
+## Shell aliases
+
+- `t` runs `tmux`
+- `v` runs `nvim`
+
+The installer symlinks `shell/aliases.sh` to `~/.machine-setup-aliases.sh` and sources it from both `~/.bashrc` and `~/.zshrc`.
 
 ## Notes
 
